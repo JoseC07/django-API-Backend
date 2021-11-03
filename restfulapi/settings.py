@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-k%gr)9vdsml+kdwt)bnfc4v$3te*un%4v@&9+t87uy1=mr$9*y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['exerciserestfulapi.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['exerciserestfulapi.herokuapp.com','127.0.0.1','workoutrestapi.herokuapp.com']
 
 
 # Application definition
