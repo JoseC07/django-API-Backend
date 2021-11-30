@@ -40,3 +40,55 @@ class CustomAuthToken(ObtainAuthToken):
             'user_id': user.pk,
             'email': user.email
         })
+
+
+class workoutapi(APIView):
+    @method_decorator(login_required, name='login') 
+    
+    def get(self, request, *args, **kwargs):
+        id = kwargs.get('id', -1)
+        print(id)
+
+        if id <= -1:
+            workouts = workout.objects.all()
+            serializer = workoutSerializer(workouts, many =True)
+            print('if')
+        else:
+            try:
+                workouts = workout.objects.get(id=id)
+            except workout.DoesNotExist:
+                # We have no object! Do something...
+                pass
+            
+            serializer = workoutSerializer(workouts, many =False)
+            print('else')
+        
+        
+        return Response(serializer.data)
+
+    def post(self,request,format= None):
+        data = request.data
+        print(data)
+
+            
+        #  if serializer.is_valid():
+        #      serializer.save()
+        #      return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return # Response(serializer.errros, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        id = kwargs.get('id', -1)
+       
+        wi = workout.objects.get(id=id)
+        wi.delete()
+        res = {'msg':'workout Deleted Successfully!'}
+        return Response(res)
+    
+    def patch(self, request,*args, **kwargs):
+        id = kwargs.get('id', -1)
+        workout = workout.objects.get(id=id)
+        serializer = workoutSerializer(data=request.data,instance=workout,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'workout Updated Successfully!'})
+        return Response(serializer.errros, status=status.HTTP_400_BAD_REQUEST)
