@@ -1,7 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
+from .models import Workout
+
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from rest_framework import status
+from .serializers import WorkoutSerializer
 
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.contrib.auth.models import User
 
@@ -43,24 +49,24 @@ class CustomAuthToken(ObtainAuthToken):
 
 
 class workoutapi(APIView):
-    @method_decorator(login_required, name='login') 
+    # @method_decorator(login_required, name='login') 
     
     def get(self, request, *args, **kwargs):
         id = kwargs.get('id', -1)
         print(id)
 
         if id <= -1:
-            workouts = workout.objects.all()
-            serializer = workoutSerializer(workouts, many =True)
+            workouts = Workout.objects.all()
+            serializer = WorkoutSerializer(workouts, many =True)
             print('if')
         else:
             try:
-                workouts = workout.objects.get(id=id)
-            except workout.DoesNotExist:
+                workouts = Workout.objects.get(id=id)
+            except Workout.DoesNotExist:
                 # We have no object! Do something...
                 pass
             
-            serializer = workoutSerializer(workouts, many =False)
+            serializer = WorkoutSerializer(workouts, many =False)
             print('else')
         
         
@@ -70,24 +76,25 @@ class workoutapi(APIView):
         data = request.data
         print(data)
 
-            
-        #  if serializer.is_valid():
-        #      serializer.save()
-        #      return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return # Response(serializer.errros, status=status.HTTP_400_BAD_REQUEST)
+        serializer = WorkoutSerializer(data=data,fields=('id','name','muscle','intesityLevel','description'))
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errros, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, *args, **kwargs):
         id = kwargs.get('id', -1)
        
-        wi = workout.objects.get(id=id)
+        wi = Workout.objects.get(id=id)
         wi.delete()
         res = {'msg':'workout Deleted Successfully!'}
         return Response(res)
     
     def patch(self, request,*args, **kwargs):
         id = kwargs.get('id', -1)
-        workout = workout.objects.get(id=id)
-        serializer = workoutSerializer(data=request.data,instance=workout,partial=True)
+        workout = Workout.objects.get(id=id)
+        serializer = WorkoutSerializer(data=request.data,instance=workout,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({'msg':'workout Updated Successfully!'})

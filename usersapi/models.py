@@ -13,13 +13,16 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 class Workout(models.Model):
 
-    user = models.ManyToManyField(settings.AUTH_USER_MODEL, null =True)
     name = models.CharField(max_length=50)
     muscle = models.CharField(max_length=50)
     intesityLevel = models.PositiveIntegerField(default=5, 
                                                 validators=[MinValueValidator(1), 
                                                 MaxValueValidator(5)])
-    volumeLevel = models.PositiveIntegerField(default=2, 
-                                              validators=[MinValueValidator(1), 
-                                              MaxValueValidator(5)])
     description = models.TextField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+        #find location of specific -- reverse
+    def get_absolute_url(self):
+        return reverse('workout-detail', kwargs={'pk': self.pk})
