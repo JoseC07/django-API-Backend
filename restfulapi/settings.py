@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-k%gr)9vdsml+kdwt)bnfc4v$3te*un%4v@&9+t87uy1=mr$9*y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','workoutrestapi.herokuapp.com']
 
@@ -87,15 +87,15 @@ WSGI_APPLICATION = 'restfulapi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES={
-   'default':{
-      'ENGINE':'django.db.backends.postgresql_psycopg2',
-      'NAME':'postgres',
-      'USER':'postgres',
-      'PASSWORD':'restfulapi',
-      'HOST':'localhost',
-      'PORT':'5432',
-   }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dfbsa5rvjnf2r7',
+        'USER': 'ghvpgiwsslxnae',
+        'PASSWORD': '940918a2b7b2d911376919a090dea6cc2e875b0f74669d4ca62311583f4f6a41',
+        'HOST': 'ec2-23-21-4-7.compute-1.amazonaws.com',
+        'PORT': '5432',
+    }
 }
 
 
